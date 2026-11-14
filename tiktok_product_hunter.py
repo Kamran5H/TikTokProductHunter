@@ -70,10 +70,10 @@ except ImportError:
 # ============================================================
 
 # Output location. Override with the TIKTOK_HUNTER_OUT env var; otherwise defaults
-# to the historical folder so existing runs keep writing to the same place.
+# to ./output inside the project folder for cross-machine portability.
 BASE_OUTPUT = Path(os.environ.get(
     "TIKTOK_HUNTER_OUT",
-    r"C:\Users\chkam\OneDrive\Desktop\Toktok Business\Top selling products",
+    str(Path(__file__).resolve().parent / "output"),
 ))
 DEBUG_DIR = BASE_OUTPUT / "_debug"
 HEADLESS = False

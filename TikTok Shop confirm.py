@@ -68,7 +68,7 @@ except ImportError:
 # Must match the hunter script's output folder. Same TIKTOK_HUNTER_OUT override.
 BASE_OUTPUT = Path(os.environ.get(
     "TIKTOK_HUNTER_OUT",
-    r"C:\Users\chkam\OneDrive\Desktop\Toktok Business\Top selling products",
+    str(Path(__file__).resolve().parent / "output"),
 ))
 HEADLESS = True                     # initial mode for headless fetches
 ALLOW_VISIBLE_FALLBACK = True       # open visible browser when headless fails

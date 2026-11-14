@@ -1,0 +1,7 @@
+playwright>=1.42
+beautifulsoup4>=4.12
+lxml>=5.1
+pandas>=2.1
+rapidfuzz>=3.6
+ddgs>=1.0
+colorama>=0.4.6
