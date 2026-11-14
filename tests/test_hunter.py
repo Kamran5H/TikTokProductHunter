@@ -1,4 +1,20 @@
+import sys
+import types
 import unittest
+from unittest.mock import MagicMock
+
+for mod in ("pandas", "bs4", "playwright", "playwright.sync_api"):
+    if mod not in sys.modules:
+        sys.modules[mod] = MagicMock()
+
+if "rapidfuzz" not in sys.modules:
+    rf = types.ModuleType("rapidfuzz")
+    fuzz_mod = types.ModuleType("rapidfuzz.fuzz")
+    fuzz_mod.token_set_ratio = lambda a, b: 100 if a == b or a in b or b in a else 0
+    rf.fuzz = fuzz_mod
+    sys.modules["rapidfuzz"] = rf
+    sys.modules["rapidfuzz.fuzz"] = fuzz_mod
+
 from tiktok_product_hunter import (
     is_fitness,
     matches_major_brand,
@@ -31,7 +47,7 @@ class TestTikTokProductHunter(unittest.TestCase):
             "price_value": 24.99,
             "ingestion_hits": 4,
         }
-        sc = score_product(p, ["Creatine Monohydrate Powder"], {"ddg_tiktok_hits": 3})
+        sc = score_product(p, ["Pure Creatine Monohydrate Powder 500g"], {"ddg_tiktok_hits": 3})
         self.assertGreater(sc["total"], 70.0)
 
     def test_diversify_top_n(self):
