@@ -510,8 +510,12 @@ def is_fitness(name):
     n = name.lower()
     if not any(k in n for k in FITNESS_KEYWORDS):
         return False
-    if any(neg in n for neg in NEGATIVE_KEYWORDS):
-        return False
+    for neg in NEGATIVE_KEYWORDS:
+        if len(neg) <= 4:
+            if re.search(rf"\b{re.escape(neg)}\b", n):
+                return False
+        elif neg in n:
+            return False
     return True
 
 
@@ -769,13 +773,10 @@ def main():
                 n = p["name"].lower()
                 if not any(k in n for k in FITNESS_KEYWORDS):
                     continue
-                # is_fitness() also drops accessories; count that reason explicitly
-                if any(neg in n for neg in NEGATIVE_KEYWORDS):
+                if not is_fitness(n):
                     dropped_acc += 1
                     continue
                 if matches_major_brand(n):
-                    continue
-                if not is_fitness(n):   # single source of truth for the fitness gate
                     continue
                 survivors.append(p)
             log.info(f"  survivors: {len(survivors)} (dropped {dropped_acc} accessories)")
